@@ -50,21 +50,24 @@ export const MenuBar: FunctionComponent<Props> = ({
     : 'All Notes';
 
   const CmdOrCtrl = isMac ? 'Cmd' : 'Ctrl';
-  const title = showTrash ? '' : `New Note • ${CmdOrCtrl}+Shift+I`;
 
   return (
     <div className="menu-bar theme-color-border">
       <IconButton
         icon={<MenuIcon />}
         onClick={toggleNavigation}
-        title="Menu • Ctrl+Shift+U"
+        title={`Menu • ${CmdOrCtrl}+Shift+U`}
       />
       {placeholder}
       <IconButton
         disabled={showTrash}
         icon={<NewNoteIcon />}
         onClick={() => onNewNote(withoutTags(searchQuery))}
-        title={title}
+        title={
+          showTrash
+            ? 'New Note (unavailable)'
+            : `New Note • ${CmdOrCtrl}+Shift+I`
+        }
       />
     </div>
   );
