@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
  * Internal dependencies
  */
 import IconButton from '../icon-button';
+import { isMac } from '../utils/platform';
 import NewNoteIcon from '../icons/new-note';
 import MenuIcon from '../icons/menu';
 import { withoutTags } from '../utils/filter-notes';
@@ -48,6 +49,9 @@ export const MenuBar: FunctionComponent<Props> = ({
     ? 'Notes With Selected Tag'
     : 'All Notes';
 
+  const CmdOrCtrl = isMac ? 'Cmd' : 'Ctrl';
+  const title = showTrash ? '' : `New Note • ${CmdOrCtrl}+Shift+I`;
+
   return (
     <div className="menu-bar theme-color-border">
       <IconButton
@@ -60,7 +64,7 @@ export const MenuBar: FunctionComponent<Props> = ({
         disabled={showTrash}
         icon={<NewNoteIcon />}
         onClick={() => onNewNote(withoutTags(searchQuery))}
-        title="New Note • Ctrl+Shift+I"
+        title={title}
       />
     </div>
   );

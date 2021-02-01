@@ -8,6 +8,7 @@ import * as S from '../state';
 const NoNotes = () => {
   const hasLoaded = useSelector((state: S.State) => state.ui.hasLoadedNotes);
   const searchQuery = useSelector((state: S.State) => state.ui.searchQuery);
+  const showTrash = useSelector((state: S.State) => state.ui.showTrash);
   const dispatch = useDispatch();
 
   const getMessage = () => {
@@ -37,7 +38,7 @@ const NoNotes = () => {
   return (
     <div className="note-list-placeholder theme-color-fg">
       {getMessage()}
-      {hasLoaded && getButton()}
+      {hasLoaded && !showTrash && getButton()}
     </div>
   );
 };

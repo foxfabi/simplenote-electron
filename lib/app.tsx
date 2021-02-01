@@ -37,6 +37,7 @@ type StateProps = {
   showEmailVerification: boolean;
   showNavigation: boolean;
   showNoteInfo: boolean;
+  showTrash: boolean;
   theme: 'light' | 'dark';
 };
 
@@ -136,7 +137,9 @@ class AppComponent extends Component<Props> {
     }
 
     if (cmdOrCtrl && shiftKey && 'i' === key) {
-      this.props.createNote();
+      if (!this.props.showTrash) {
+        this.props.createNote();
+      }
 
       event.stopPropagation();
       event.preventDefault();
@@ -204,6 +207,7 @@ const mapStateToProps: S.MapState<StateProps> = (state) => ({
   showEmailVerification: selectors.shouldShowEmailVerification(state),
   showNavigation: state.ui.showNavigation,
   showNoteInfo: state.ui.showNoteInfo,
+  showTrash: state.ui.showTrash,
   theme: selectors.getTheme(state),
 });
 
