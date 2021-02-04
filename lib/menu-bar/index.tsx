@@ -63,11 +63,7 @@ export const MenuBar: FunctionComponent<Props> = ({
         disabled={showTrash}
         icon={<NewNoteIcon />}
         onClick={() => onNewNote(withoutTags(searchQuery))}
-        title={
-          showTrash
-            ? 'New Note (unavailable)'
-            : `New Note • ${CmdOrCtrl}+Shift+I`
-        }
+        title={`New Note • ${CmdOrCtrl}+Shift+I`}
       />
     </div>
   );

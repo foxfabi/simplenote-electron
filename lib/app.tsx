@@ -137,9 +137,7 @@ class AppComponent extends Component<Props> {
     }
 
     if (cmdOrCtrl && shiftKey && 'i' === key) {
-      if (!this.props.showTrash) {
-        this.props.createNote();
-      }
+      this.props.createNote();
 
       event.stopPropagation();
       event.preventDefault();
