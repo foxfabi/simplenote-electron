@@ -11,7 +11,7 @@ import isEmailTag from '../utils/is-email-tag';
 import ReorderIcon from '../icons/reorder';
 import TagListInput from './input';
 import TrashIcon from '../icons/trash';
-import { openTag, showDialog, toggleTagEditing } from '../state/ui/actions';
+import { openTag, tagToTrash, toggleTagEditing } from '../state/ui/actions';
 
 import * as selectors from './../state/selectors';
 
@@ -30,7 +30,7 @@ type DispatchProps = {
   onEditTags: () => any;
   openTag: (tagName: T.TagName) => any;
   reorderTag: (tagName: T.TagName, newIndex: number) => any;
-  showTrashTagConfirmation: () => any;
+  tagToTrash: (tagName: T.TagName) => any;
 };
 
 type Props = StateProps & DispatchProps;
@@ -44,7 +44,7 @@ const SortableTag = SortableElement(
     isSelected,
     selectTag,
     theme,
-    showTrashTagConfirmation,
+    tagToTrash,
     value: [tagHash, tag],
   }: {
     allowReordering: boolean;
@@ -52,7 +52,7 @@ const SortableTag = SortableElement(
     isSelected: boolean;
     selectTag: (tagName: T.TagName) => any;
     theme: 'light' | 'dark';
-    showTrashTagConfirmation: () => any;
+    tagToTrash: (tagName: T.TagName) => any;
     value: [T.TagHash, T.Tag];
   }) => (
     <li
@@ -73,7 +73,7 @@ const SortableTag = SortableElement(
       />
       {editingActive && (
         <button className="icon-button button-trash">
-          <TrashIcon onClick={() => showTrashTagConfirmation()} />
+          <TrashIcon onClick={() => tagToTrash(tag.name)} />
         </button>
       )}
       {editingActive && allowReordering && (
@@ -101,7 +101,7 @@ const SortableTagList = SortableContainer(
     openTag: (tagName: T.TagName) => any;
     sortTagsAlpha: boolean;
     theme: 'light' | 'dark';
-    trashTagConfirm: () => any;
+    trashTagConfirm: (tagName: T.TagName) => any;
   }) => (
     <ul className="tag-list-items">
       {items.map((value, index) => (
@@ -113,7 +113,7 @@ const SortableTagList = SortableContainer(
           isSelected={openedTag === value[0]}
           selectTag={openTag}
           theme={theme}
-          showTrashTagConfirmation={trashTagConfirm}
+          tagToTrash={() => trashTagConfirm(value[1].name)}
           value={value}
         />
       ))}
@@ -138,7 +138,7 @@ export class TagList extends Component<Props> {
       sortTagsAlpha,
       tags,
       theme,
-      showTrashTagConfirmation,
+      tagToTrash,
     } = this.props;
 
     const classes = classNames('tag-list', {
@@ -182,7 +182,7 @@ export class TagList extends Component<Props> {
           theme={theme}
           onSortEnd={this.reorderTag}
           useDragHandle={true}
-          trashTagConfirm={showTrashTagConfirmation}
+          trashTagConfirm={tagToTrash}
         />
       </div>
     );
@@ -193,13 +193,14 @@ const mapStateToProps: S.MapState<StateProps> = (state) => {
   const {
     data,
     settings: { sortTagsAlpha },
-    ui: { editingTags, openedTag },
+    ui: { editingTags, openedTag, tagToTrash },
   } = state;
   return {
     editingTags,
     sortTagsAlpha,
     tags: data.tags,
     openedTag,
+    tagToTrash,
     theme: selectors.getTheme(state),
   };
 };
@@ -212,7 +213,7 @@ const mapDispatchToProps: S.MapDispatch<DispatchProps> = {
     tagName,
     newIndex,
   }),
-  showTrashTagConfirmation: () => showDialog('TRASH-TAG-CONFIRMATION'),
+  tagToTrash: tagToTrash,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TagList);

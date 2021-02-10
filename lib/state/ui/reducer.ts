@@ -323,6 +323,16 @@ const tagSuggestions: A.Reducer<T.TagHash[]> = (
   return action.meta.searchResults.tagHashes;
 };
 
+const tagToTrash: A.Reducer<T.TagName | ''> = (state = '', action) => {
+  switch (action.type) {
+    case 'TAG_TO_TRASH':
+      console.log(state);
+      return state;
+    default:
+      return '';
+  }
+};
+
 export default combineReducers({
   dialogs,
   editMode,
@@ -343,5 +353,6 @@ export default combineReducers({
   showTrash,
   simperiumConnected,
   tagSuggestions,
+  tagToTrash,
   unsyncedNoteIds,
 });
